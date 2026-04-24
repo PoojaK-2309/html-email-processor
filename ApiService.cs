@@ -1,16 +1,21 @@
-﻿using System.Text;
+﻿using System.Text.Json;
+using HtmlEmailProcessor.Models;
 
 namespace HtmlEmailProcessor.Services;
 
 public class ApiService
 {
-    public async Task<Stream> GetEmailStreamAsync()
+    public async IAsyncEnumerable<EmailModel> StreamEmailsAsync(string filePath)
     {
-        var largeHtml = "<html><body>" +
-                        string.Join("", Enumerable.Repeat("<p>This is a large email content.</p>", 100000)) +
-                        "</body></html>";
+        using FileStream stream = File.OpenRead(filePath);
 
-        var bytes = Encoding.UTF8.GetBytes(largeHtml);
-        return new MemoryStream(bytes);
+        await foreach (var email in JsonSerializer.DeserializeAsyncEnumerable<EmailModel>(stream))
+        {
+            if (email != null)
+            {
+                await Task.Delay(50);
+                yield return email;
+            }
+        }
     }
 }

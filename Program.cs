@@ -1,14 +1,42 @@
 ﻿using HtmlEmailProcessor.Services;
 
-var apiService = new ApiService();
-var processor = new EmailProcessor();
+class Program
+{
+    static async Task Main(string[] args)
+    {
+        string filePath = "sample-emails.json";
 
-Console.WriteLine("Fetching email stream...");
+        var apiService = new ApiService();
+        var processor = new EmailProcessor();
 
-using var stream = await apiService.GetEmailStreamAsync();
+        int batchSize = 2;
+        var batch = new List<HtmlEmailProcessor.Models.EmailModel>();
 
-Console.WriteLine("Processing emails...");
+        await foreach (var email in apiService.StreamEmailsAsync(filePath))
+        {
+            batch.Add(email);
 
-await processor.ProcessStreamAsync(stream);
+            if (batch.Count >= batchSize)
+            {
+                ProcessBatch(batch, processor);
+                batch.Clear();
+            }
+        }
 
-Console.WriteLine("Done.");
+        // process remaining
+        if (batch.Count > 0)
+        {
+            ProcessBatch(batch, processor);
+        }
+
+        Console.WriteLine("Processing completed.");
+    }
+
+    static void ProcessBatch(List<HtmlEmailProcessor.Models.EmailModel> batch, EmailProcessor processor)
+    {
+        Parallel.ForEach(batch, email =>
+        {
+            processor.Process(email);
+        });
+    }
+}

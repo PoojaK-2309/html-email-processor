@@ -1,25 +1,39 @@
-﻿namespace HtmlEmailProcessor.Services;
+﻿using HtmlEmailProcessor.Models;
+using HtmlEmailProcessor.Utilities;
+
+namespace HtmlEmailProcessor.Services;
 
 public class EmailProcessor
 {
-    public async Task ProcessStreamAsync(Stream stream)
+    private static readonly object _fileLock = new object();
+
+    private static readonly string _outputPath =
+        Path.Combine(AppContext.BaseDirectory, "output.txt");
+
+    public void Process(EmailModel email)
     {
-        using var reader = new StreamReader(stream);
-
-        char[] buffer = new char[4096];
-        int bytesRead;
-
-        while ((bytesRead = await reader.ReadAsync(buffer, 0, buffer.Length)) > 0)
+        try
         {
-            var chunk = new string(buffer, 0, bytesRead);
+            var cleanText = HtmlCleaner.ExtractText(email.Body);
 
-            ProcessChunk(chunk);
+            // ✅ Clean grouped logging
+            Logger.Info($"""
+Processed Email ID: {email.Id}
+Subject: {email.Subject}
+Content Preview: {cleanText.Substring(0, Math.Min(100, cleanText.Length))}
+--------------------------------------------------
+""");
+
+            // ✅ Thread-safe file write
+            lock (_fileLock)
+            {
+                File.AppendAllText(_outputPath,
+                    $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] ID: {email.Id}, Subject: {email.Subject}{Environment.NewLine}");
+            }
         }
-    }
-
-    private void ProcessChunk(string chunk)
-    {
-        int count = chunk.Split("<p>").Length - 1;
-        Console.WriteLine($"Processed chunk: {count} <p> tags");
+        catch (Exception ex)
+        {
+            Logger.Error($"Error processing email {email.Id}: {ex.Message}");
+        }
     }
 }

@@ -1,0 +1,17 @@
+[
+  {
+    "Id": 1,
+    "Subject": "Welcome Email",
+    "Body": "<html><body><h1>Welcome!</h1><p>This is your first email.</p></body></html>"
+  },
+  {
+    "Id": 2,
+    "Subject": "Discount Offer",
+    "Body": "<html><body><h2>50% OFF</h2><p>Grab your deal now!</p></body></html>"
+  },
+  {
+    "Id": 3,
+    "Subject": "Newsletter",
+    "Body": "<html><body><p>This week's updates...</p></body></html>"
+  }
+]
