@@ -1,43 +1,47 @@
-# Efficient HTML Email Processor (.NET)
+# HTML Email Processor (.NET)
 
-## 🚀 Overview
-This project demonstrates how to process large HTML email data from an API efficiently without running into memory issues like OutOfMemoryException.
+A memory-efficient .NET console application for processing large volumes of HTML email data without running into OutOfMemory exceptions.
 
-## ❗ Problem
-Many applications fail when handling large HTML responses because they load the entire content into memory, causing crashes and poor performance.
+## 🚀 Features
 
-## 💡 Solution
-This project uses a **stream-based processing approach** to handle large data safely:
-- Reads data in chunks (buffered processing)
-- Avoids loading full response into memory
-- Ensures stable performance
+- Streaming JSON processing using `IAsyncEnumerable`
+- Avoids loading entire dataset into memory
+- HTML content extraction and cleaning
+- Thread-safe file writing
+- Structured logging
+- Scalable design for large datasets
 
-## 🛠 Technologies Used
-- C#
+## 🛠 Tech Stack
+
 - .NET 8
-- Stream Processing
-- Memory Optimization Techniques
-
-## ⚙️ How It Works
-1. API returns large HTML content
-2. Data is processed in small chunks using StreamReader
-3. Each chunk is handled independently
-4. Memory usage remains low and efficient
-
-## 📌 Key Features
-- Prevents OutOfMemoryException
-- Scalable for large data processing
-- Clean and modular architecture
-- Backend-focused solution
-
-## 🎯 Use Cases
-- Email processing systems
-- API data pipelines
-- Backend optimization
-- Large data handling services
+- System.Text.Json
+- Async Streams (`IAsyncEnumerable`)
+- HtmlAgilityPack (optional if extended)
 
 ## 📂 Project Structure
-/Services
-  ApiService.cs
-  EmailProcessor.cs
-Program.cs
+Models/ -> Email data models
+Services/ -> API + Processing logic
+Utilities/ -> Logging + HTML cleaning
+Program.cs -> Entry point
+sample-emails.json -> Sample data
+
+## ▶️ How to Run
+
+1. Open in Visual Studio
+2. Build solution
+3. Run the project
+
+## 📈 Output
+
+- Console logs
+- `output.txt` file generated in `/bin/Debug/net8.0/`
+
+## 💡 Problem Solved
+
+Efficiently processes large HTML email datasets without causing memory overflow by using streaming instead of full deserialization.
+
+---
+
+## 📬 Author
+
+.NET Backend Developer | API Development | Performance Optimization
