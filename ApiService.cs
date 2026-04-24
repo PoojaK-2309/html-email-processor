@@ -6,16 +6,15 @@ namespace HtmlEmailProcessor.Services;
 public class ApiService
 {
     public async IAsyncEnumerable<EmailModel> StreamEmailsAsync(string filePath)
-    {
-        using FileStream stream = File.OpenRead(filePath);
+{
+    using FileStream stream = File.OpenRead(filePath);
 
-        await foreach (var email in JsonSerializer.DeserializeAsyncEnumerable<EmailModel>(stream))
+    await foreach (var email in JsonSerializer.DeserializeAsyncEnumerable<EmailModel>(stream))
+    {
+        if (email != null)
         {
-            if (email != null)
-            {
-                await Task.Delay(50);
-                yield return email;
-            }
+            await Task.Delay(50);
+            yield return email;
         }
     }
 }
