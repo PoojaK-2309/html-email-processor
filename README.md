@@ -35,6 +35,20 @@ sample-emails.json -> Sample data
 
 - Console logs
 - `output.txt` file generated in `/bin/Debug/net8.0/`
+- 
+## 📸 Screenshots
+
+### 🔹 Streaming Logic (Memory Efficient Processing)
+![Streaming](assets/streaming-logic.png)
+
+### 🔹 Project Architecture
+![Structure](assets/project-structure.png)
+
+### 🔹 Console Output
+![Console](assets/console-output.png)
+
+### 🔹 Processed Output File
+![Output](assets/output-file.png)
 
 ## 💡 Problem Solved
 
